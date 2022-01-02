@@ -3,11 +3,11 @@
 # AiSD - Projekt-3
 Zadanie 6. Napisz program, który dla zadanego grafu skierowanego reprezentowanego przy pomocy 
 listy krawędzi zapisanych przy pomocy dwóch tablic wyznaczy i wypisze następujące informacje :
-1) wszystkich sąsiadów dla każdego wierzchołka grafu(sąsiad wierzchołka wi, to ten wierzchołek do którego prowadzi krawędź z wi)
-2) wszystkie wierzchołki, które są sąsiadami każdego wierzchołka
-3) stopnie wychodzące wszystkich wierzchołków
-4) stopnie wchodzące wszystkich wierzchołków
-5) wszystkie wierzchołki izolowane
+- 1) wszystkich sąsiadów dla każdego wierzchołka grafu(sąsiad wierzchołka wi, to ten wierzchołek do którego prowadzi krawędź z wi)
+- 2) wszystkie wierzchołki, które są sąsiadami każdego wierzchołka
+- 3) stopnie wychodzące wszystkich wierzchołków
+- 4) stopnie wchodzące wszystkich wierzchołków
+- 5) wszystkie wierzchołki izolowane
 6) wszystkie pętle
 7) wszystkie krawędzie dwukierunkowe
 Każdy z powyższych podpunktów powinien być realizowany jako oddzielna funkcja.
@@ -33,6 +33,11 @@ void print_adj_matrix(int** adjacency_matrix, int nodes);
 
 void all_neighbours(int** adjacency_matrix, int nodes);
 void everyones_neighbour(int** adjacency_matrix, int nodes);
+
+void find_degree_of_edges(int** adjacency_matrix, int nodes);
+
+void find_loops(int** adjacency_matrix, int nodes);
+void find_2way_edges(int** adjacency_matrix, int nodes);
 
 int main()
 {
@@ -72,6 +77,11 @@ int main()
     cout << endl;
 
     everyones_neighbour(adjacency_matrix, nodes);
+
+    find_degree_of_edges(adjacency_matrix, nodes);
+
+    find_loops(adjacency_matrix, nodes);
+    find_2way_edges(adjacency_matrix, nodes);
 
 
     system("pause");
@@ -180,11 +190,13 @@ void everyones_neighbour(int** adjacency_matrix, int nodes)
 {
     //można zmniejszyć ilość porównać dając break
     bool is_neighbour = true;
+    bool exists = false;
 
     cout << "\n Wierzcholki sasiadujace ze wszystkimi innymi wierzcholkami: ";
 
     for (int i = 0; i < nodes; i++)
     {
+        exists = is_neighbour;
         is_neighbour = true;
 
         for (int j = 0; j < nodes; j++)
@@ -197,5 +209,61 @@ void everyones_neighbour(int** adjacency_matrix, int nodes)
         }
 
         if (is_neighbour) cout << i + 1 << ", ";
+    }
+
+
+    if (!exists) cout << "brak. \n";
+}
+
+
+void find_degree_of_edges(int** adjacency_matrix, int nodes)
+{
+    int outgoing_edges = 0;
+    int incoming_edges = 0;
+
+
+    for (int i = 0; i < nodes; i++)
+    {
+        outgoing_edges = 0;
+        incoming_edges = 0;
+
+
+        for (int j = 0; j < nodes; j++)
+        {
+            if (adjacency_matrix[i][j] == 1)
+            {
+                outgoing_edges++;
+            }
+
+            if (adjacency_matrix[j][i] == 1)
+            {
+                incoming_edges++;
+            }
+        }
+
+        cout << "\n Stopien wychodzacy wierzcholka " << i+1 << ":" << outgoing_edges;
+        cout << "\n Stopien wchodzacy wierzcholka "  << i+1 << ":" << incoming_edges;
+
+    }
+}
+
+void find_loops(int** adjacency_matrix, int nodes)
+{
+    cout << "\n Wierzcholki posiadajace petle: ";
+
+    for (int i = 0; i < nodes; i++)
+        if (adjacency_matrix[i][i]) cout << i + 1 << ", ";
+}
+
+void find_2way_edges(int** adjacency_matrix, int nodes)
+{
+    for (int i = 0; i < nodes; i++)
+    {
+        for (int j = 0; j < i; j++)
+        {
+            if (adjacency_matrix[i][j] && adjacency_matrix[j][i])
+                cout << "\n Znaleziono dwukierunkowa krawedz miedzy: " << i + 1 << " i " << j + 1 << ".";
+        }
+
     }
 }
