@@ -32,7 +32,7 @@ void print_adj_matrix(int** adjacency_matrix, int nodes);
 
 
 void all_neighbours(int** adjacency_matrix, int nodes);
-
+void everyones_neighbour(int** adjacency_matrix, int nodes);
 
 int main()
 {
@@ -68,6 +68,11 @@ int main()
     print_adj_matrix(adjacency_matrix, nodes);
 
     all_neighbours(adjacency_matrix, nodes);
+
+    cout << endl;
+
+    everyones_neighbour(adjacency_matrix, nodes);
+
 
     system("pause");
     return 0;
@@ -120,7 +125,7 @@ void adding_edges(int edge_begin[], int edge_end[], int nodes, int size)
         if (flag) i--;
     }
 
-
+    cout << endl;
 
     for (int i = 0; i < size; i++)
     {cout << edge_begin[i] << "->" << edge_end[i] <<"\n"; }
@@ -138,7 +143,7 @@ void fill_adjacency_matrix(int edge_begin[], int edge_end[], int** adjacency_mat
 
 void print_adj_matrix(int** adjacency_matrix, int nodes)
 {
-    cout << endl << setw(4);
+    cout << endl << "Macierz incydencji" << endl << setw(4);
 
     for (int i = 0; i < nodes; i++)
     {
@@ -156,7 +161,7 @@ void all_neighbours(int** adjacency_matrix, int nodes)
     {
         izolowany = true;
 
-        cout << "\n Wszyscy sąsiedzi wierzcholka " << i + 1 << ": ";
+        cout << "\n Wszyscy sasiedzi wierzcholka " << i + 1 << ": ";
 
         for (int j = 0; j < nodes; j++)
         {
@@ -168,5 +173,29 @@ void all_neighbours(int** adjacency_matrix, int nodes)
         }
 
         if (izolowany) cout << " brak krawedzi wchodzacych. Wierzcholek izolowany";
+    }
+}
+
+void everyones_neighbour(int** adjacency_matrix, int nodes)
+{
+    //można zmniejszyć ilość porównać dając break
+    bool is_neighbour = true;
+
+    cout << "\n Wierzcholki sasiadujace ze wszystkimi innymi wierzcholkami: ";
+
+    for (int i = 0; i < nodes; i++)
+    {
+        is_neighbour = true;
+
+        for (int j = 0; j < nodes; j++)
+        {
+            if (adjacency_matrix[i][j] == 0 && j != i) //wtedy węzeł i nie jest sąsiadem wszystkich
+            {
+            is_neighbour = false;
+            break;           
+            }
+        }
+
+        if (is_neighbour) cout << i + 1 << ", ";
     }
 }
