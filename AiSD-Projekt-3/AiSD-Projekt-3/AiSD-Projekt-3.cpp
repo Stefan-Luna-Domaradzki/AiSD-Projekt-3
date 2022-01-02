@@ -31,6 +31,9 @@ void fill_adjacency_matrix(int edge_begin[], int edge_end[], int **adjacency_mat
 void print_adj_matrix(int** adjacency_matrix, int nodes);
 
 
+void all_neighbours(int** adjacency_matrix, int nodes);
+
+
 int main()
 {
     //std::list<int> krawedzie[10];
@@ -46,8 +49,8 @@ int main()
     
     
 
-    cout << "\n Podaj ilosc wezlow: ";    cin >> nodes;
-    cout << "\n Podaj ilosc krawedzi : "; cin >> edges;
+    cout << "Podaj ilosc wezlow: ";    cin >> nodes;
+    cout << "Podaj ilosc krawedzi : "; cin >> edges;
 
 
     edge_begin = new int[edges];
@@ -64,6 +67,7 @@ int main()
     fill_adjacency_matrix(edge_begin, edge_end, adjacency_matrix, nodes, edges);
     print_adj_matrix(adjacency_matrix, nodes);
 
+    all_neighbours(adjacency_matrix, nodes);
 
     system("pause");
     return 0;
@@ -141,5 +145,28 @@ void print_adj_matrix(int** adjacency_matrix, int nodes)
         for (int j = 0; j < nodes; j++)
             cout << adjacency_matrix[i][j] << setw(4);
         cout << endl;
+    }
+}
+
+void all_neighbours(int** adjacency_matrix, int nodes)
+{
+    bool izolowany;
+
+    for (int i = 0; i < nodes; i++)
+    {
+        izolowany = true;
+
+        cout << "\n Wszyscy sąsiedzi wierzcholka " << i + 1 << ": ";
+
+        for (int j = 0; j < nodes; j++)
+        {
+            if (adjacency_matrix[j][i] == 1)//np [2][1] to znaczy że z 1 do 2 jest '->' czyli 1 jest sąsiadem 2
+            {
+                cout << j + 1 << ", ";
+                izolowany = false;
+            }
+        }
+
+        if (izolowany) cout << " brak krawedzi wchodzacych. Wierzcholek izolowany";
     }
 }
