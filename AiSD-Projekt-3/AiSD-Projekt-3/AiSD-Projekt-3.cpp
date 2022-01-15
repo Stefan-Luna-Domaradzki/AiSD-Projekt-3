@@ -20,30 +20,31 @@ Kod powinien być opatrzony stosownymi komentarzami.
 #include <cstdlib>
 #include <iomanip>
 #include <list>
+#include <vector>
+
 
 using namespace std;
 
-void edges_from_file(int edge_begin, int edge_end);
-void adding_edges(int edge_begin[], int edge_end[], int nodes, int size);
 
-//macierz w komórkach n będzie przechowywała węzły o wartości n+1
-void fill_adjacency_matrix(int edge_begin[], int edge_end[], int **adjacency_matrix, int nodes, int size);
-void print_adj_matrix(int** adjacency_matrix, int nodes);
+void adding_edges(vector<int>* graph_list , int edge_start, int edge_end);
+
+void print_edge_list(vector<int>* graph_list, int nodes);
 
 
-void all_neighbours(int** adjacency_matrix, int nodes);
-void everyones_neighbour(int** adjacency_matrix, int nodes);
+void all_neighbours(vector<int>* graph_list, int nodes);
 
-void find_degree_of_edges(int** adjacency_matrix, int nodes);
 
-void find_loops(int** adjacency_matrix, int nodes);
-void find_2way_edges(int** adjacency_matrix, int nodes);
+void everyones_neighbour(vector<int>* graph_list, int nodes);
+
+void find_degree_of_nodes(vector<int>* graph_list, int nodes);
+
+void find_loops(vector<int>* graph_list, int nodes);
+void find_2way_edges(vector<int>* graph_list, int nodes);
+
+void find_isolated(vector<int>* graph_list, int nodes);
 
 int main()
-{
-    //std::list<int> krawedzie[10];
-
-    //krawedzie->push_back(1);
+{/*
 
     int nodes; 
     int edges;
@@ -51,6 +52,7 @@ int main()
 
     int* edge_begin;
     int* edge_end;
+    
     
     
 
@@ -66,204 +68,187 @@ int main()
     for (int i = 0; i < nodes; ++i)
         adjacency_matrix[i] = new int[nodes];
 
-    adding_edges(edge_begin, edge_end, nodes, edges);
+
+    */
+    vector<int>* graph_list;
+
+    int nodes;
+    int edges;
+    int a, b;
+
+    cout << "podaj ilosc wezlow: "; cin >> nodes;
+    cout << "podaj ilosc krawedzi: "; cin >> edges;
 
 
-    fill_adjacency_matrix(edge_begin, edge_end, adjacency_matrix, nodes, edges);
-    print_adj_matrix(adjacency_matrix, nodes);
+    graph_list = new vector<int>[nodes];
+    
+    bool is_valid = true;
 
-    all_neighbours(adjacency_matrix, nodes);
+    for (int i = 0; i < edges; i++)
+    {
+        is_valid = true;
+
+        cin >> a >> b;
+        if (a > nodes) { cout << "brak wezla: " << a << "podaj poprawny wezel"; is_valid = false; i--; }
+        else
+            if (b > nodes) { cout << "brak wezla: " << b << "podaj poprawny wezel"; is_valid = false; i--; }
+
+        if(is_valid) adding_edges(graph_list, a, b);
+    }
+
+    //cout << endl << "g0: " << graph_list[0].size() << "g1: " << graph_list[1].size() << endl;
+
+
+
+    print_edge_list(graph_list, nodes);
+
+
+
+
+    //all_neighbours(graph_list, nodes);
 
     cout << endl;
 
-    everyones_neighbour(adjacency_matrix, nodes);
+    //everyones_neighbour(graph_list, nodes);
 
-    find_degree_of_edges(adjacency_matrix, nodes);
+    //find_degree_of_nodes(graph_list, nodes);
 
-    find_loops(adjacency_matrix, nodes);
-    find_2way_edges(adjacency_matrix, nodes);
-
+    //find_loops(graph_list, nodes);
+    //find_2way_edges(graph_list, nodes);
+    find_isolated(graph_list, nodes);
 
     system("pause");
     return 0;
 }
 
-void edges_from_file(int edge_begin, int edge_end)
+void adding_edges(vector<int>* graph_list, int edge_start, int edge_end)
 {
-    {
-        /* ifstream edges;
-           edges.open("edges.txt", ios::in);
-           string line;
-           while (!edges.eof()){cout << "xD";}
-           edges.close();*/
-    }
+graph_list[edge_start - 1].push_back(edge_end);   
 }
 
-void adding_edges(int edge_begin[], int edge_end[], int nodes, int size)
+void print_edge_list(vector<int> *graph_list, int nodes)
 {
-    int add_edge;
-    bool flag;
-
-
-    cout << "\n dostepne wezly : "; for (int i = 0; i < nodes; i++) cout << " " << i + 1;
-    cout << "\n";
-
-
-
-    for (int i = 0; i < size; i++)
-    {
-        flag = false;
-
-        cout << "\n Podaj wezel poczatku i konca (2 liczby oddzielone spaja) krawedzi  '" << i + 1 << "': "; 
-        
-        cin >> add_edge;
-        if (add_edge <1 || add_edge>nodes)
-        {
-            flag = true;
-            cout << "\n brak wezla: " << add_edge;
-        }
-        edge_begin[i] = add_edge;
-        
-        
-        cin >> add_edge; edge_end[i]   = add_edge;
-        if (add_edge <1 || add_edge>nodes)
-        {
-            flag = true;
-            cout << "\n brak wezla: " << add_edge;
-        }
-
-        if (flag) i--;
-    }
-
-    cout << endl;
-
-    for (int i = 0; i < size; i++)
-    {cout << edge_begin[i] << "->" << edge_end[i] <<"\n"; }
-}
-
-void fill_adjacency_matrix(int edge_begin[], int edge_end[], int** adjacency_matrix, int nodes, int size)
-{
-    for (int i = 0; i < nodes; i++)
-        for (int j = 0; j < nodes; j++)
-            adjacency_matrix[i][j] = 0;
-
-    for (int i = 0; i < size; i++)
-        adjacency_matrix[edge_begin[i] - 1][edge_end[i] - 1] = 1;
-}
-
-void print_adj_matrix(int** adjacency_matrix, int nodes)
-{
-    cout << endl << "Macierz incydencji" << endl << setw(4);
+    cout << endl << "lista krawedzi: ";
 
     for (int i = 0; i < nodes; i++)
     {
-        for (int j = 0; j < nodes; j++)
-            cout << adjacency_matrix[i][j] << setw(4);
-        cout << endl;
+        cout << "\n wezly '" << i + 1 << "' : ";
+        for (int j = 0; j < graph_list[i].size(); j++)
+            cout << graph_list[i][j] << setw(3);
+        cout << endl << setw(-5);
     }
 }
 
-void all_neighbours(int** adjacency_matrix, int nodes)
+void all_neighbours(vector<int>* graph_list, int nodes)
 {
-    bool izolowany;
-
     for (int i = 0; i < nodes; i++)
     {
-        izolowany = true;
-
-        cout << "\n Wszyscy sasiedzi wierzcholka " << i + 1 << ": ";
-
+        cout << endl << "Sasiedzi wezla " << i+1 << " : ";
         for (int j = 0; j < nodes; j++)
         {
-            if (adjacency_matrix[j][i] == 1)//np [2][1] to znaczy że z 1 do 2 jest '->' czyli 1 jest sąsiadem 2
+            for (int k = 0; k < graph_list[j].size(); k++)
             {
-                cout << j + 1 << ", ";
-                izolowany = false;
+                if (graph_list[j][k] == i + 1) cout << j + 1 << ", ";
             }
         }
-
-        if (izolowany) cout << " brak krawedzi wchodzacych. Wierzcholek izolowany";
     }
 }
 
-void everyones_neighbour(int** adjacency_matrix, int nodes)
+void everyones_neighbour(vector<int>* graph_list, int nodes)
 {
-    //można zmniejszyć ilość porównać dając break
-    bool is_neighbour = true;
-    bool exists = false;
+    bool is_everyones_neighbour = true;
 
-    cout << "\n Wierzcholki sasiadujace ze wszystkimi innymi wierzcholkami: ";
+    cout << endl << "Wezel sasiadujacy ze wszystkimi: ";
 
     for (int i = 0; i < nodes; i++)
     {
-        exists = is_neighbour;
-        is_neighbour = true;
+        is_everyones_neighbour = true;
 
-        for (int j = 0; j < nodes; j++)
+        if (graph_list[i].size() == nodes - 1)
         {
-            if (adjacency_matrix[i][j] == 0 && j != i) //wtedy węzeł i nie jest sąsiadem wszystkich
+            //cout << "szukam dla " << i+1 << endl;
+           //cout << endl << "size : " << graph_list[i].size() << " nodes - 1 : " << nodes - 1;
+
+            for (int j = 0; j < graph_list[i].size(); j++)
             {
-            is_neighbour = false;
-            break;           
+                if (graph_list[i][j] == i+1) is_everyones_neighbour = false;
+                break;
             }
+
+            if (is_everyones_neighbour)cout << i + 1;
         }
 
-        if (is_neighbour) cout << i + 1 << ", ";
+        
     }
-
-
-    if (!exists) cout << "brak. \n";
 }
-
-
-void find_degree_of_edges(int** adjacency_matrix, int nodes)
+    
+void find_degree_of_nodes(vector<int> *graph_list, int nodes)
 {
-    int outgoing_edges = 0;
     int incoming_edges = 0;
-
+    int outgoing_edges = 0;
+    
 
     for (int i = 0; i < nodes; i++)
     {
-        outgoing_edges = 0;
         incoming_edges = 0;
-
+        outgoing_edges = graph_list[i].size();
 
         for (int j = 0; j < nodes; j++)
-        {
-            if (adjacency_matrix[i][j] == 1)
+        {   for (int k = 0; k < graph_list[j].size(); k++)
             {
-                outgoing_edges++;
-            }
-
-            if (adjacency_matrix[j][i] == 1)
-            {
-                incoming_edges++;
+                if (graph_list[j][k] == i+1) { incoming_edges++; }
             }
         }
 
-        cout << "\n Stopien wychodzacy wierzcholka " << i+1 << ":" << outgoing_edges;
+    
         cout << "\n Stopien wchodzacy wierzcholka "  << i+1 << ":" << incoming_edges;
+        cout << "\n Stopien wychodzacy wierzcholka " << i+1 << ":" << outgoing_edges;
+        
 
     }
 }
 
-void find_loops(int** adjacency_matrix, int nodes)
+void find_loops(vector<int>* graph_list, int nodes)
 {
     cout << "\n Wierzcholki posiadajace petle: ";
 
     for (int i = 0; i < nodes; i++)
-        if (adjacency_matrix[i][i]) cout << i + 1 << ", ";
+        for (int j = 0; j < graph_list[i].size(); j++)
+        {
+            if (graph_list[i][j] == i + 1)
+            {
+                cout << i + 1 << ", ";
+                break;
+            }
+        }
 }
 
-void find_2way_edges(int** adjacency_matrix, int nodes)
+void find_2way_edges(vector<int>* graph_list, int nodes)
 {
+    for (int i = 0; i < nodes; i++)  //wszystkie wezly
+    {
+        for (int j = 0; j < graph_list[i].size(); j++)  //wszystkie krawedzie od danego wezla
+        {
+            for (int k = 0; k < graph_list[graph_list[i][j]-1].size(); k++)  //czy wezel otrzymujacy krawedz ma krawedz w przeciwnym kierunku
+            {
+                if (graph_list[graph_list[i][j]-1][k] == i+1)
+                {
+                    cout << endl << "Znaleziono krawedz dwukierunkowa miedzy wezlami: " << i + 1 << " i " << graph_list[i][j];
+                }
+            }
+        }
+    }
+}
+
+void find_isolated(vector<int>* graph_list, int nodes)
+{
+    cout << endl << "Wierzcholki izolowane: ";
+
     for (int i = 0; i < nodes; i++)
     {
-        for (int j = 0; j < i; j++)
+        if (graph_list[i].size()==0)
         {
-            if (adjacency_matrix[i][j] && adjacency_matrix[j][i])
-                cout << "\n Znaleziono dwukierunkowa krawedz miedzy: " << i + 1 << " i " << j + 1 << ".";
+            cout << i + 1 << ", ";
         }
-
     }
 }

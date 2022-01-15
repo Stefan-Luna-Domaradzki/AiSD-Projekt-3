@@ -1,2 +1,9 @@
 ﻿  AiSD-Projekt-3.cpp
+C:\Users\Stefan\Documents\GitHub\AiSD-Projekt-3\AiSD-Projekt-3\AiSD-Projekt-3\AiSD-Projekt-3.cpp(136,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Stefan\Documents\GitHub\AiSD-Projekt-3\AiSD-Projekt-3\AiSD-Projekt-3\AiSD-Projekt-3.cpp(149,31): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Stefan\Documents\GitHub\AiSD-Projekt-3\AiSD-Projekt-3\AiSD-Projekt-3\AiSD-Projekt-3.cpp(172,31): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Stefan\Documents\GitHub\AiSD-Projekt-3\AiSD-Projekt-3\AiSD-Projekt-3\AiSD-Projekt-3.cpp(197,31): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Stefan\Documents\GitHub\AiSD-Projekt-3\AiSD-Projekt-3\AiSD-Projekt-3\AiSD-Projekt-3.cpp(216,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Stefan\Documents\GitHub\AiSD-Projekt-3\AiSD-Projekt-3\AiSD-Projekt-3\AiSD-Projekt-3.cpp(230,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Stefan\Documents\GitHub\AiSD-Projekt-3\AiSD-Projekt-3\AiSD-Projekt-3\AiSD-Projekt-3.cpp(232,31): warning C4018: '<': signed/unsigned mismatch
   AiSD-Projekt-3.vcxproj -> C:\Users\Stefan\Documents\GitHub\AiSD-Projekt-3\AiSD-Projekt-3\Debug\AiSD-Projekt-3.exe
